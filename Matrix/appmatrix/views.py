@@ -23,7 +23,7 @@ def vector(request):
     if matrix is None:
         return HttpResponse('Матрица не указана')
 
-    matrix = matrix.split('-')
+    matrix = matrix.split('*')
 
     new_matrix = []
 
@@ -41,9 +41,15 @@ def vector(request):
 
         new_matrix.append(row)
 
-    new_matrix = np.linalg.eigh(new_matrix)
+    new_matrix = np.array(new_matrix)
+    r, b = np.linalg.eig(new_matrix)
 
-    '''new_matrix = '<br/><br/>'.join(['&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.join(map(str,row)) for row in vector_matrix])
-    new_matrix = '<p style=\"font-size:20pt;\">'+vector_matrix_str+'</p>'''
 
-    return HttpResponse(f"Собсвтенные числа и векторы равны: {new_matrix}")
+    new_matrix = '<br/><br/>'.join(['","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.join(map(str, row)) for row in new_matrix])
+    '''b = '<br/><br/>'.join(['&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.join(map(str, row)) for row in b])
+    b = '<p style=\"font-size:13pt;\">' + b + '</p>' '''
+    new_matrix = '<p style=\"font-size:13pt;\">'+new_matrix+'</p>'
+    new_matrix = '<h2 style="color:#551e67" ><center> Результаты: </center></h1>' + new_matrix + '<h4><center> Куваков Темир (ИНБО-07-20) </center></h4>'
+
+    return HttpResponse('<br>'f"Собсвтенные числа: {r}"'<br/>'
+                        '<br>'f"Собственные векторы: {b}"'<br/>')
